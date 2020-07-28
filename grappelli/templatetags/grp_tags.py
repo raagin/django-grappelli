@@ -1,26 +1,25 @@
 # coding: utf-8
 
-# python imports
-from functools import wraps
 import json
+from functools import wraps
+
+from django import template
+from django.contrib.contenttypes.models import ContentType
+from django.template.loader import get_template
+from django.utils.formats import get_format
+from django.utils.safestring import mark_safe
+from django.utils.translation import get_language
+from django.utils.translation import gettext as _
+
+from grappelli.settings import (ADMIN_TITLE, ADMIN_URL, CLEAN_INPUT_TYPES,
+                                SWITCH_USER, SWITCH_USER_ORIGINAL,
+                                SWITCH_USER_TARGET)
 
 try:
     from django.contrib.auth import get_user_model
     User = get_user_model()
 except ImportError:
     from django.contrib.auth.models import User
-
-# django imports
-from django import template
-from django.contrib.contenttypes.models import ContentType
-from django.utils.formats import get_format
-from django.utils.safestring import mark_safe
-from django.utils.translation import get_language
-from django.template.loader import get_template
-from django.utils.translation import ugettext as _
-
-# grappelli imports
-from grappelli.settings import ADMIN_TITLE, ADMIN_URL, SWITCH_USER, SWITCH_USER_ORIGINAL, SWITCH_USER_TARGET, CLEAN_INPUT_TYPES
 
 register = template.Library()
 
@@ -210,13 +209,20 @@ def prettylabel(value):
 # WITH TEMPLATE DEFINITION
 @register.simple_tag
 def admin_list_filter(cl, spec):
+    field_name = getattr(spec, "field", None)
+    parameter_name = getattr(spec, "parameter_name", None)
+    if field_name is not None:
+        field_name = spec.field.name
+    elif parameter_name is not None:
+        field_name = spec.parameter_name
     try:
         tpl = get_template(cl.model_admin.change_list_filter_template)
-    except:
+    except:  # noqa
         tpl = get_template(spec.template)
     return tpl.render({
         'title': spec.title,
         'choices': list(spec.choices(cl)),
+        'field_name': field_name,
         'spec': spec,
     })
 

@@ -27,8 +27,8 @@
         {% with inline_admin_formset.opts.sortable_field_name|default:"" as sortable_field_name %}
         {% for inline_admin_form in inline_admin_formset|formsetsort:sortable_field_name %}
             <!-- element -->
-            <div class="form-row grp-module grp-tbody{% if inline_admin_form.original or inline_admin_form.show_url %} has_original{% endif %}{% if forloop.last %} grp-empty-form{% endif %}"
-                id="{{ inline_admin_formset.formset.prefix }}{% if not forloop.last %}{{ forloop.counter0 }}{% else %}-empty{% endif %}">
+            <div class="form-row grp-module grp-tbody{% if inline_admin_form.original or inline_admin_form.show_url %} has_original{% endif %}{% if forloop.last and inline_admin_formset.has_add_permission %} grp-empty-form{% endif %}"
+                id="{{ inline_admin_formset.formset.prefix }}{% if forloop.last and inline_admin_formset.has_add_permission %}-empty{% else %}{{ forloop.counter0 }}{% endif %}">
                 {% if inline_admin_form.form.non_field_errors %}
                     {{ inline_admin_form.form.non_field_errors }}
                 {% endif %}
@@ -283,7 +283,7 @@
         $("#{{ inline_admin_formset.formset.prefix }}-group")
             .find("div.grp-td.{{ inline_admin_formset.opts.sortable_field_name }} :input")
             .each(function(i, item) {
-                $(item).bind('change', function(event) {
+                $(item).on('change', function(event) {
                     var desired_index = $(event.target).val() * 1;
                     if(!isNaN(desired_index) && desired_index >= 0) {
                         var $row = $(event.target).parents('div.grp-tbody.grp-dynamic-form');
@@ -302,7 +302,7 @@
                     }
                 });
             });
-        $("#{{ opts.model_name }}_form").bind("submit", function(){
+        $("#{{ opts.model_name }}_form").on("submit", function(){
             var sortable_field_name = "{{ inline_admin_formset.opts.sortable_field_name }}",
                 sortable_excludes = {% get_sortable_excludes inline_admin_formset.opts %},
                 i = 0;

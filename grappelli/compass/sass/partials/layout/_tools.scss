@@ -218,28 +218,35 @@ fieldset.grp-module {
     display: flex;
 }
 
-.grp-related-widget-tools {
-    position: absolute;
-    right: -30px;
+.grp-tools.grp-related-widget-tools {
     top: 2px;
     z-index: 1;
+    li {
+        padding: 0;
+    }
     a {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        font-size: 11px;
+        line-height: 16px;
+        width: 21px;
+        height: 21px;
         &.add-another {
             top: 0;
             margin: 0;
         }
     }
-    input + &,
-    select + &,
-    textarea + &,
     .radiolist + &,
-    .checkboxlist + & {
+    .checkboxlist + &,
+    .grp-related-widget + & {
         position: relative;
-        display: inline-block;
+        display: flex;
         float: right;
         right: 0;
         padding-left: 0;
-        margin-right: 0
+        margin-right: 0;
+        margin-left: 5px;
     }
     .radiolist + &,
     .checkboxlist + & {

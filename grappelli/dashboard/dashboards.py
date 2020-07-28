@@ -4,18 +4,15 @@
 Module where grappelli dashboard classes are defined.
 """
 
-# DJANGO IMPORTS
-from django.utils import six
-from django.utils.translation import ugettext_lazy as _
-from django.urls import reverse
 from django import forms
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
-# GRAPPELLI IMPORTS
 from grappelli.dashboard import modules
 from grappelli.dashboard.utils import get_admin_site_name
 
 
-class Dashboard(six.with_metaclass(forms.MediaDefiningClass)):
+class Dashboard(metaclass=forms.MediaDefiningClass):
     """
     Base class for dashboards.
     The Dashboard class is a simple python list that has three additional
@@ -56,7 +53,7 @@ class Dashboard(six.with_metaclass(forms.MediaDefiningClass)):
     Here's an example of a custom dashboard::
 
         from django.urls import reverse
-        from django.utils.translation import ugettext_lazy as _
+        from django.utils.translation import gettext_lazy as _
         from admin_tools.dashboard import modules, Dashboard
 
         class MyDashboard(Dashboard):
@@ -81,7 +78,7 @@ class Dashboard(six.with_metaclass(forms.MediaDefiningClass)):
 
                 # append a recent actions module
                 self.children.append(modules.RecentActions(
-                    title=_('Recent Actions'),
+                    title=_('Recent actions'),
                     limit=5
                 ))
 
@@ -154,7 +151,7 @@ class DefaultIndexDashboard(Dashboard):
         ))
 
         # append a recent actions module
-        self.children.append(modules.RecentActions(_('Recent Actions'), 5))
+        self.children.append(modules.RecentActions(_('Recent actions'), 5))
 
         # append a feed module
         self.children.append(modules.Feed(

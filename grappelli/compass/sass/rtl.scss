@@ -599,12 +599,12 @@ body.rtl {
         select,
         select:focus {
             padding: 4px 5px 4px 28px;
-            -webkit-appearance: textfield;
+            -webkit-appearance: none;
             background-image: url('../images/icons/form-select.png');
             background-position: 0 50%;
             background-repeat: no-repeat;
         }
-        select[multiple=multiple] {
+        select[multiple] {
             background-image: none;
         }
     }
@@ -705,7 +705,7 @@ body.rtl {
                 margin-right: 3px;
             }
         }
-        select[multiple=multiple] {
+        select[multiple] {
             margin: 0 -1px 0 0;
             padding-right: 3px;
             padding-left: 0;
@@ -744,8 +744,10 @@ body.rtl {
     }
 
     .grp-table img.grp-help-tooltip {
-        float: left;
-        margin: 2px 0 0 -2px;
+        position: absolute;
+        left: 18px;
+        right: auto;
+        top: 3px;
     }
 
     // JQUERY UI

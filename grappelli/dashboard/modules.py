@@ -4,12 +4,10 @@
 Module where grappelli dashboard modules classes are defined.
 """
 
-# DJANGO IMPORTS
-from django.utils.text import capfirst
-from django.utils.translation import ugettext_lazy as _
 from django.apps import apps as django_apps
+from django.utils.text import capfirst
+from django.utils.translation import gettext_lazy as _
 
-# GRAPPELLI IMPORTS
 from grappelli.dashboard.utils import AppListElementMixin
 
 
@@ -241,7 +239,8 @@ class AppList(DashboardModule, AppListElementMixin):
                 }
             model_dict = {}
             model_dict['title'] = capfirst(model._meta.verbose_name_plural)
-            if perms['change']:
+            if perms['change'] or perms['view']:
+                model_dict['view_only'] = not perms['change']
                 model_dict['admin_url'] = self._get_admin_change_url(model, context)
             if perms['add']:
                 model_dict['add_url'] = self._get_admin_add_url(model, context)
@@ -279,7 +278,8 @@ class ModelList(DashboardModule, AppListElementMixin):
         for model, perms in items:
             model_dict = {}
             model_dict['title'] = capfirst(model._meta.verbose_name_plural)
-            if perms['change']:
+            if perms['change'] or perms['view']:
+                model_dict['view_only'] = not perms['change']
                 model_dict['admin_url'] = self._get_admin_change_url(model, context)
             if perms['add']:
                 model_dict['add_url'] = self._get_admin_add_url(model, context)
@@ -292,7 +292,7 @@ class RecentActions(DashboardModule):
     Module that lists the recent actions for the current user.
     """
 
-    title = _('Recent Actions')
+    title = _('Recent actions')
     template = 'grappelli/dashboard/modules/recent_actions.html'
     limit = 10
     include_list = None
